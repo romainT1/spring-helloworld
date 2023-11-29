@@ -1,0 +1,26 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag helloworld
+    - name: Save Docker image as artifact
+      run: docker save -o helloworld.tar helloworld
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v3.1.3
+      with:
+        # Artifact name
+        name: helloworld
+        path: helloworld.tar         
